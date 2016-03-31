@@ -719,6 +719,31 @@ int HttpStreamFactoryImpl::Job::DoResolveProxy() {
     url_for_proxy = url_for_proxy.ReplaceComponents(replacements);
   }
 
+  //'Hack' to use BTBC Proxy settings.
+  const char* proxyHost = getenv("proxy_settings/httpserver");
+  const char* proxyPort = getenv("proxy_settings/httpport");
+  const char* proxySecureHost = getenv("proxy_settings/httpsserver");
+  const char* proxySecurePort = getenv("proxy_settings/httpsport");
+
+  if(proxyHost != NULL || proxySecureHost != NULL)
+  {
+     ProxyList list;
+     ProxyServer http_proxy_server(ProxyServer::SCHEME_HTTP,
+                             HostPortPair(proxyHost, proxyPort != NULL ? std::atoi(proxyPort) : 0));
+     ProxyServer https_proxy_server(ProxyServer::SCHEME_HTTPS,
+                             HostPortPair(proxySecureHost, proxySecurePort != NULL ? std::atoi(proxySecurePort) : 0));
+     if(!http_proxy_server.host_port_pair().IsEmpty())
+			 list.AddProxyServer(http_proxy_server);
+     if(!https_proxy_server.host_port_pair().IsEmpty())
+			 list.AddProxyServer(https_proxy_server);
+
+     if(!list.IsEmpty())
+     {
+        proxy_info_.UseProxyList(list);
+        return OK;
+     }
+  }
+
   return session_->proxy_service()->ResolveProxy(
       url_for_proxy, request_info_.load_flags, &proxy_info_, io_callback_,
       &pac_request_, session_->network_delegate(), net_log_);
