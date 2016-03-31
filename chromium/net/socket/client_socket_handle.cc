@@ -43,7 +43,8 @@ void ClientSocketHandle::ResetInternal(bool cancel) {
         socket_->NetLog().EndEvent(NetLog::TYPE_SOCKET_IN_USE);
         // Release the socket back to the ClientSocketPool so it can be
         // deleted or reused.
-        pool_->ReleaseSocket(group_name_, socket_.Pass(), pool_id_);
+        if(pool_)
+          pool_->ReleaseSocket(group_name_, socket_.Pass(), pool_id_);
       } else {
         // If the handle has been initialized, we should still have a
         // socket.
@@ -52,7 +53,8 @@ void ClientSocketHandle::ResetInternal(bool cancel) {
     } else if (cancel) {
       // If we did not get initialized yet and we have a socket
       // request pending, cancel it.
-      pool_->CancelRequest(group_name_, this);
+      if(pool_)
+        pool_->CancelRequest(group_name_, this);
     }
   }
   is_initialized_ = false;
