@@ -694,7 +694,8 @@ int HttpStreamFactoryImpl::Job::DoResolveProxy() {
 
   next_state_ = STATE_RESOLVE_PROXY_COMPLETE;
 
-  if (request_info_.load_flags & LOAD_BYPASS_PROXY) {
+  const char* noProxy = getenv("DoNotUseProxy");
+  if (noProxy != NULL || (request_info_.load_flags & LOAD_BYPASS_PROXY)) {
     proxy_info_.UseDirect();
     return OK;
   }
