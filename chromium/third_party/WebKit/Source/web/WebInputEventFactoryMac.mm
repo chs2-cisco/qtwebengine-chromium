@@ -1178,7 +1178,7 @@ WebGestureEvent WebInputEventFactory::gestureEvent(NSEvent *event, NSView *view)
         result.type = WebInputEvent::GesturePinchUpdate;
         result.data.pinchUpdate.scale = [event magnification] + 1.0;
         break;
-    case NSEventTypeSmartMagnify:
+    case 32: // NSEventTypeSmartMagnify
         // Map the Cocoa "double-tap with two fingers" zoom gesture to regular
         // GestureDoubleTap, because the effect is similar to single-finger
         // double-tap zoom on mobile platforms. Note that tapCount is set to 1
