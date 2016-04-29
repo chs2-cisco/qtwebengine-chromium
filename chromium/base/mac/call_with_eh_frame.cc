@@ -26,12 +26,10 @@ _Unwind_Reason_Code CxxPersonalityRoutine(
   return _URC_END_OF_STACK;
 }
 
-#if defined(OS_IOS)
 // No iOS assembly implementation exists, so just call the block directly.
 void CallWithEHFrame(void (^block)(void)) {
   block();
 }
-#endif
 
 }  // namespace mac
 }  // namespace base

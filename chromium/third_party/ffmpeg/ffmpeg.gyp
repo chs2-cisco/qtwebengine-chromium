@@ -368,7 +368,7 @@
                       # and butterflies still exist...as do rainbows, sunshine,
                       # tulips, etc., etc...but not kittens. Those went away
                       # with this flag.
-                      '-Wl,-read_only_relocs,suppress',
+                      '-read_only_relocs suppress',
                     ],
                   },
                 }],
