@@ -271,6 +271,7 @@ component("base") {
     "mac/bundle_locations.mm",
     "mac/call_with_eh_frame.cc",
     "mac/call_with_eh_frame.h",
+    "mac/call_with_eh_frame_asm.S",
     "mac/cocoa_protocols.h",
     "mac/dispatch_source_mach.cc",
     "mac/dispatch_source_mach.h",

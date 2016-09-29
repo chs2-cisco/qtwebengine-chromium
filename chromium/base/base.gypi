@@ -281,6 +281,7 @@
           'mac/bundle_locations.mm',
           'mac/call_with_eh_frame.cc',
           'mac/call_with_eh_frame.h',
+          'mac/call_with_eh_frame_asm.S',
           'mac/close_nocancel.cc',
           'mac/cocoa_protocols.h',
           'mac/dispatch_source_mach.cc',
