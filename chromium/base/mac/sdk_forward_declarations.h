@@ -473,7 +473,7 @@ BASE_EXPORT extern NSString* const NSAppearanceNameVibrantDark;
 #if !defined(MAC_OS_X_VERSION_10_10) || \
     MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_10
 
-@interface NSUserActivity : NSObject
+@interface NSUserActivity (YosemiteSDK)
 
 @property(readonly, copy) NSString* activityType;
 @property(copy) NSDictionary* userInfo;

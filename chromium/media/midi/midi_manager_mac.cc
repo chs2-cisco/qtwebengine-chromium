@@ -307,7 +307,7 @@ void MidiManagerMac::ReadMidiDispatch(const MIDIPacketList* packet_list,
 #if __LP64__
   MIDIEndpointRef source = reinterpret_cast<uintptr_t>(src_conn_refcon);
 #else
-  MIDIEndpointRef source = reinterpret_cast<MIDIEndpointRef>(src_conn_refcon);
+  MIDIEndpointRef source = static_cast<MIDIEndpointRef>(src_conn_refcon);
 #endif
 
   // Dispatch to class method.
