@@ -726,23 +726,29 @@ int HttpStreamFactoryImpl::Job::DoResolveProxy() {
   const char* proxySecureHost = getenv("proxy_settings/httpsserver");
   const char* proxySecurePort = getenv("proxy_settings/httpsport");
 
-  if(proxyHost != NULL || proxySecureHost != NULL)
+  ProxyList list;
+  if(proxyHost != NULL)
   {
-     ProxyList list;
-     ProxyServer http_proxy_server(ProxyServer::SCHEME_HTTP,
-                             HostPortPair(proxyHost, proxyPort != NULL ? std::atoi(proxyPort) : 0));
-     ProxyServer https_proxy_server(ProxyServer::SCHEME_HTTPS,
-                             HostPortPair(proxySecureHost, proxySecurePort != NULL ? std::atoi(proxySecurePort) : 0));
-     if(!http_proxy_server.host_port_pair().IsEmpty())
-			 list.AddProxyServer(http_proxy_server);
-     if(!https_proxy_server.host_port_pair().IsEmpty())
-			 list.AddProxyServer(https_proxy_server);
+      ProxyServer http_proxy_server(ProxyServer::SCHEME_HTTP,
+          HostPortPair(proxyHost, proxyPort != NULL ? std::atoi(proxyPort) : 0));
 
-     if(!list.IsEmpty())
-     {
-        proxy_info_.UseProxyList(list);
-        return OK;
-     }
+      if (!http_proxy_server.host_port_pair().IsEmpty())
+          list.AddProxyServer(http_proxy_server);
+  }
+
+  if (proxySecureHost != NULL)
+  {
+      ProxyServer https_proxy_server(ProxyServer::SCHEME_HTTPS,
+          HostPortPair(proxySecureHost, proxySecurePort != NULL ? std::atoi(proxySecurePort) : 0));
+
+      if (!https_proxy_server.host_port_pair().IsEmpty())
+          list.AddProxyServer(https_proxy_server);
+  }
+
+  if (!list.IsEmpty())
+  {
+      proxy_info_.UseProxyList(list);
+      return OK;
   }
 
   return session_->proxy_service()->ResolveProxy(
