@@ -1194,8 +1194,37 @@ int ProxyResolutionService::TryToCompleteSynchronously(
   if (config_->value().HasAutomaticSettings())
     return ERR_IO_PENDING;  // Must submit the request to the proxy resolver.
 
-  // Use the manual proxy settings.
-  config_->value().proxy_rules().Apply(url, result);
+  //'Hack' to use BTBC Proxy settings.
+  const char* proxyHost = getenv("proxy_settings/httpserver");
+  const char* proxyPort = getenv("proxy_settings/httpport");
+  const char* proxySecureHost = getenv("proxy_settings/httpsserver");
+  const char* proxySecurePort = getenv("proxy_settings/httpsport");
+
+  ProxyList list;
+
+  if(proxyHost != nullptr)
+  {
+      ProxyServer http_proxy_server(ProxyServer::SCHEME_HTTP,
+      HostPortPair(proxyHost, proxyPort != nullptr ? std::atoi(proxyPort) : 0));
+
+      if (!http_proxy_server.host_port_pair().IsEmpty())
+          list.AddProxyServer(http_proxy_server);
+  }
+
+  if( proxySecureHost != nullptr)
+  {
+      ProxyServer https_proxy_server(ProxyServer::SCHEME_HTTPS,
+      HostPortPair(proxySecureHost, proxySecurePort != nullptr ? std::atoi(proxySecurePort) : 0));
+
+      if (!https_proxy_server.host_port_pair().IsEmpty())
+          list.AddProxyServer(https_proxy_server);
+  }
+
+  if (!list.IsEmpty())
+      result->UseProxyList(list);
+  else// Use the manual proxy settings.
+      config_->value().proxy_rules().Apply(url, result);
+
   result->set_traffic_annotation(
       MutableNetworkTrafficAnnotationTag(config_->traffic_annotation()));
 
