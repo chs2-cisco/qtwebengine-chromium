@@ -2,6 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+/*
+ * BTUC-21338: Use client proxy settings when set
+ *
+ * Mar 25, 2019, Aditya Kolachana (Cisco Systems, Inc.)
+*/
+
 #include "net/proxy_resolution/proxy_resolution_service.h"
 
 #include <algorithm>

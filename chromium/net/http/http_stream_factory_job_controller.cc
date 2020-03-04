@@ -25,6 +25,12 @@
 #include "net/spdy/spdy_session.h"
 #include "url/url_constants.h"
 
+/*
+ * BTUC-21338: Use client proxy settings when set
+ *
+ * Mar 25, 2019, Aditya Kolachana (Cisco Systems, Inc.)
+*/
+
 namespace net {
 
 namespace {
